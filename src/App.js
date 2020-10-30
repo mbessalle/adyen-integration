@@ -3,6 +3,7 @@ import "./App.css";
 import axios from "axios";
 import AdyenCheckout from "@adyen/adyen-web";
 import '@adyen/adyen-web/dist/adyen.css';
+const { v1: uuidv1 } = require("uuid");
 
 const showFinalResult = (response) => {
   console.log("final result");

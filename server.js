@@ -41,6 +41,48 @@ app.post("/paymentMethods", (req, res) => {
       console.error("error 1", error);
     });
 });
+
+app.post("/payments", (req, res) => {
+  const reference = uuidv1();
+  axios
+    .post(
+      "https://checkout-test.adyen.com/v64/payments",
+      {
+        amount: {
+          currency: "EUR",
+          value: req.body.value,
+        },
+        reference: reference,
+        paymentMethod: req.body.paymentMethod,
+        browserInfo: req.body.browserInfo,
+        dateOfBirth: req.body.dateOfBirth,
+        shopperReference: req.body.shopperReference,
+        shopperName: req.body.shopperName,
+        shopperEmail: req.body.shopperEmail,
+        channel: "web",
+        shopperIP: "localhost",
+        deliverAddress: req.body.deliverAddress,
+        deviceFingerprint: req.body.deviceFingerprint,
+        deliverDate: req.body.deliverDate,
+        origin: "https://localhost.com",
+        billingAddress: req.body.billingAddress,
+        returnUrl: `http://localhost:3000/${reference}`,
+        merchantAccount: process.env.MERCHANT_ACCOUNT,
+        additionalData: {
+          allow3DS2: true,
+        },
+      },
+      {
+        headers: {
+          "x-API-key": process.env.API_KEY,
+          "content-type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      res.json(response.data);
+    });
+});
 app.listen(port, () => {
   console.log(`Backend listening at http://localhost:${port}`);
 });
