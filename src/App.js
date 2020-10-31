@@ -2,8 +2,10 @@ import React from "react";
 import "./App.css";
 import axios from "axios";
 import AdyenCheckout from "@adyen/adyen-web";
-import '@adyen/adyen-web/dist/adyen.css';
-const { v1: uuidv1 } = require("uuid");
+import "@adyen/adyen-web/dist/adyen.css";
+import SimpleSelect from "./Form";
+
+
 
 const showFinalResult = (response) => {
   console.log("final result");
@@ -73,6 +75,7 @@ main();
 function App() {
   return (
     <div id="payment-wrapper">
+      <SimpleSelect />
       <div id="dropin-container"></div>
     </div>
   );
