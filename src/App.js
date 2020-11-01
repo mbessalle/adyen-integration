@@ -30,15 +30,16 @@ const main = async () => {
       axios
         .post("/payments", state.data)
         .then((response) => {
-          if (response.action) {
-            dropin.handleAction(response.action);
+          if (response.data.action) {
+            dropin.handleAction(response.data.action);
           } else {
             // Your function to show the final result to the shopper
             showFinalResult(response);
           }
         })
         .catch((error) => {
-          throw Error(error);
+          console.error(error)
+          // throw Error(error);
         });
     },
     onAdditionalDetails: (state, dropin) => {
@@ -46,8 +47,8 @@ const main = async () => {
       axios
         .post("/payments/details", state.data)
         .then((response) => {
-          if (response.action) {
-            dropin.handleAction(response.action);
+          if (response.data.action) {
+            dropin.handleAction(response.data.action);
           } else {
             // Your function to show the final result to the shopper
             showFinalResult(response);
