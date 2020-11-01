@@ -63,6 +63,7 @@ const main = async () => {
         holderNameRequired: true,
         enableStoreDetails: true,
         hideCVC: false,
+        billingAddressRequired: true,
         name: "Credit or debit card",
       },
     },

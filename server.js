@@ -1,4 +1,3 @@
-const { response } = require("express");
 const express = require("express");
 const app = express();
 const port = 5000;
@@ -64,7 +63,7 @@ app.post("/payments", (req, res) => {
         deliverAddress: req.body.deliverAddress,
         deviceFingerprint: req.body.deviceFingerprint,
         deliverDate: req.body.deliverDate,
-        origin: "https://localhost.com",
+        origin: "https://localhost",
         billingAddress: req.body.billingAddress,
         returnUrl: `http://localhost:3000/${reference}`,
         merchantAccount: process.env.MERCHANT_ACCOUNT,
@@ -80,6 +79,12 @@ app.post("/payments", (req, res) => {
       }
     )
     .then((response) => {
+      console.log(response.data);
+      if (response.data.action.type == "redirect") {
+        res.cookie("paymentData", response.data.action.paymentData, {
+          sameSite: "none", secure: true,
+        });
+      }
       res.json(response.data);
     });
 });

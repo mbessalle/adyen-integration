@@ -5,74 +5,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-
-const currency_list = [
-  "AED",
-  "AUD",
-  "BGN",
-  "BHD",
-  "BRL",
-  "CAD",
-  "CHF",
-  "CNY",
-  "CZK",
-  "DKK",
-  "EUR",
-  "GBP",
-  "HKD",
-  "HRK",
-  "HUF",
-  "ISK",
-  "ILS",
-  "INR",
-  "JOD",
-  "JPY",
-  "KRW",
-  "KWD",
-  "MYR",
-  "NOK",
-  "NZD",
-  "OMR",
-  "PLN",
-  "QAR",
-  "RON",
-  "RUB",
-  "SAR",
-  "SEK",
-  "SGD",
-  "THB",
-  "TWD",
-  "USD",
-  "ZAR",
-];
-
-const country_list = [
-  "Austria",
-  "Australia",
-  "Belgium",
-  "Canada",
-  "Croatia",
-  "Czech Republic",
-  "Estonia",
-  "Finland",
-  "France",
-  "Germany",
-  "Greece",
-  "Ireland",
-  "Italy",
-  "Latvia",
-  "Lithuania",
-  "Luxembourg",
-  "Netherlands",
-  "Poland",
-  "Portugal",
-  "Slovakia",
-  "Slovenia",
-  "Spain",
-  "Switzerland",
-  "United Kingdom (including Isle of Man & Jersey)",
-  "United States",
-];
+import { currency_list, country_list } from "./constants.js";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -99,8 +32,8 @@ export default function SimpleSelect() {
           value={currency}
           onChange={(event) => setCurrency(event.target.value)}
         >
-          {currency_list.map((name) => (
-            <MenuItem value={name}>{name}</MenuItem>
+          {currency_list.map((name, i) => (
+            <MenuItem key={i} value={name}>{name}</MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -112,8 +45,8 @@ export default function SimpleSelect() {
           value={country}
           onChange={(event) => setCountry(event.target.value)}
         >
-          {country_list.map((name) => (
-            <MenuItem value={name}>{name}</MenuItem>
+          {country_list.map((name, i) => (
+            <MenuItem key={i} value={name}>{name}</MenuItem>
           ))}
         </Select>
         <FormHelperText>Some important helper text</FormHelperText>
