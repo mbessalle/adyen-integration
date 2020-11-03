@@ -49,7 +49,7 @@ export default function SimpleSelect() {
             <MenuItem key={i} value={name}>{name}</MenuItem>
           ))}
         </Select>
-        <FormHelperText>Some important helper text</FormHelperText>
+        {/* <FormHelperText>Some important helper text</FormHelperText> */}
       </FormControl>
     </div>
   );
