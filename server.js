@@ -4,9 +4,11 @@ const port = 5000;
 const axios = require("axios").default;
 const { v1: uuidv1 } = require("uuid");
 require("dotenv").config();
+const cookieParser = require("cookie-parser");
 
 //body parser middleware
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/getClientKey", (_, res) => {
   res.send(process.env.CLIENT_KEY);
@@ -37,7 +39,7 @@ app.post("/paymentMethods", (req, res) => {
       res.json(response.data);
     })
     .catch((error) => {
-      console.error("error 1", error);
+      console.error("error /paymentMethods", error);
     });
 });
 
@@ -49,7 +51,7 @@ app.post("/payments", (req, res) => {
       {
         amount: {
           currency: "EUR",
-          value: req.body.value,
+          value: 1337,
         },
         reference: reference,
         paymentMethod: req.body.paymentMethod,
@@ -63,7 +65,7 @@ app.post("/payments", (req, res) => {
         deliverAddress: req.body.deliverAddress,
         deviceFingerprint: req.body.deviceFingerprint,
         deliverDate: req.body.deliverDate,
-        origin: "https://localhost",
+        origin: "http://localhost",
         billingAddress: req.body.billingAddress,
         returnUrl: "http://localhost:3000/",
         merchantAccount: process.env.MERCHANT_ACCOUNT,
@@ -79,16 +81,37 @@ app.post("/payments", (req, res) => {
       }
     )
     .then((response) => {
-      if (response.data.action.type == "redirect") {
-        res.cookie("paymentData", response.data.action.paymentData, {
-          sameSite: "none",
-          secure: true,
-        });
+      if (response.data.action && response.data.action.type == "redirect") {
+        res.cookie("paymentData", response.data.action.paymentData);
       }
       res.json(response.data);
-      console.log(response.data)
+    })
+    .catch((error) => {
+      console.error("error /payments", error);
     });
 });
+
+app.post("/payments/details", (req, res) => {
+  console.log("cookies");
+  console.log(req.cookies);
+  axios
+    .post(
+      "https://checkout-test.adyen.com/v64/payments/details",
+      { details: req.body, paymentData: req.cookies.paymentData },
+      {
+        headers: {
+          "x-API-key": process.env.API_KEY,
+          "content-type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      console.log(response.data);
+      res.json(response.data);
+    })
+    .catch((error) => console.error(error));
+});
+
 app.listen(port, () => {
   console.log(`Backend listening at http://localhost:${port}`);
 });

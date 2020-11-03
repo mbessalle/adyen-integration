@@ -4,13 +4,19 @@ import axios from "axios";
 import AdyenCheckout from "@adyen/adyen-web";
 import "@adyen/adyen-web/dist/adyen.css";
 import SimpleSelect from "./Form";
+import { useLocation } from "react-router-dom";
 
-
-
-const showFinalResult = (response) => {
+const showFinalResult = (response, location_message) => {
   console.log("final result");
+  console.log(location_message);
   console.log(response);
 };
+
+// A custom hook that builds on useLocation to parse
+// the query string for you.
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
 const main = async () => {
   let clientKey = axios.get("/getClientKey");
@@ -33,17 +39,15 @@ const main = async () => {
           if (response.data.action) {
             dropin.handleAction(response.data.action);
           } else {
-            // Your function to show the final result to the shopper
             showFinalResult(response);
           }
         })
         .catch((error) => {
-          console.error(error)
+          console.error(error);
           // throw Error(error);
         });
     },
     onAdditionalDetails: (state, dropin) => {
-      // Your function calling your server to make a `/payments/details` request
       axios
         .post("/payments/details", state.data)
         .then((response) => {
@@ -55,7 +59,8 @@ const main = async () => {
           }
         })
         .catch((error) => {
-          throw Error(error);
+          console.error(error);
+          // throw Error(error);
         });
     },
     paymentMethodsConfiguration: {
@@ -75,6 +80,15 @@ const main = async () => {
 main();
 
 function App() {
+  let query = useQuery();
+  let details = {
+    payload: query.get("payload"),
+  };
+  if (details.payload !== null) {
+    axios.post("/payments/details/", details).then((response) => {
+      showFinalResult(response, "response_payload");
+    });
+  }
   return (
     <div id="payment-wrapper">
       <SimpleSelect />
