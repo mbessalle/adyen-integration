@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const port = 5000;
 const axios = require("axios").default;
-const { v1: uuidv1 } = require("uuid");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 
@@ -39,12 +38,12 @@ app.post("/paymentMethods", (req, res) => {
       res.json(response.data);
     })
     .catch((error) => {
-      console.error("error /paymentMethods", error);
+      // console.error("error /paymentMethods", error);
     });
 });
 
 app.post("/payments", (req, res) => {
-  const reference = uuidv1();
+  const reference = 'moises_checkoutChallenge';
   axios
     .post(
       "https://checkout-test.adyen.com/v64/payments",
@@ -84,27 +83,28 @@ app.post("/payments", (req, res) => {
       if (response.data.action && response.data.action.type == "redirect") {
         res.cookie("paymentData", response.data.action.paymentData);
       }
+      console.log('/payments response server')
+      console.log(response.data)
       res.json(response.data);
     })
     .catch((error) => {
-      console.error("error /payments", error);
+      // console.error("error /payments", error);
     });
 });
 
 app.post("/payments/details", (req, res) => {
-  console.log("cookies");
-  console.log(req.cookies);
+  // console.log("cookies");
+  // console.log(req.cookies);
+  const body = req.body.details
+    ? req.body
+    : { details: req.body, paymentData: req.cookies.paymentData };
   axios
-    .post(
-      "https://checkout-test.adyen.com/v64/payments/details",
-      { details: req.body, paymentData: req.cookies.paymentData },
-      {
-        headers: {
-          "x-API-key": process.env.API_KEY,
-          "content-type": "application/json",
-        },
-      }
-    )
+    .post("https://checkout-test.adyen.com/v64/payments/details", body, {
+      headers: {
+        "x-API-key": process.env.API_KEY,
+        "content-type": "application/json",
+      },
+    })
     .then((response) => {
       console.log(response.data);
       res.json(response.data);

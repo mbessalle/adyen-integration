@@ -2,7 +2,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { currency_list, country_list } from "./constants.js";
@@ -49,7 +48,6 @@ export default function SimpleSelect() {
             <MenuItem key={i} value={name}>{name}</MenuItem>
           ))}
         </Select>
-        {/* <FormHelperText>Some important helper text</FormHelperText> */}
       </FormControl>
     </div>
   );
