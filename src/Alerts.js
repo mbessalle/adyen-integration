@@ -21,7 +21,7 @@ export default function DescriptionAlerts(props) {
       {props.resultCode === "Refused" ? (
         <Alert
           onClose={() => {
-            history.push('/')
+            history.push("/");
             props.setResultCode("");
           }}
           severity="error"
@@ -35,7 +35,7 @@ export default function DescriptionAlerts(props) {
       {props.resultCode === "Error" ? (
         <Alert
           onClose={() => {
-            history.push('/')
+            history.push("/");
             props.setResultCode("");
           }}
           severity="error"
@@ -48,7 +48,7 @@ export default function DescriptionAlerts(props) {
       {props.resultCode === "Authorised" ? (
         <Alert
           onClose={() => {
-            history.push('/')
+            history.push("/");
             props.setResultCode("");
           }}
           severity="success"

@@ -38,12 +38,12 @@ app.post("/paymentMethods", (req, res) => {
       res.json(response.data);
     })
     .catch((error) => {
-      // console.error("error /paymentMethods", error);
+      console.error("error /paymentMethods", error);
     });
 });
 
 app.post("/payments", (req, res) => {
-  const reference = 'moises_checkoutChallenge';
+  const reference = "moises_checkoutChallenge";
   axios
     .post(
       "https://checkout-test.adyen.com/v64/payments",
@@ -83,18 +83,16 @@ app.post("/payments", (req, res) => {
       if (response.data.action && response.data.action.type == "redirect") {
         res.cookie("paymentData", response.data.action.paymentData);
       }
-      console.log('/payments response server')
-      console.log(response.data)
+      console.log("/payments response server");
+      console.log(response.data);
       res.json(response.data);
     })
     .catch((error) => {
-      // console.error("error /payments", error);
+      console.error("error /payments", error);
     });
 });
 
 app.post("/payments/details", (req, res) => {
-  // console.log("cookies");
-  // console.log(req.cookies);
   const body = req.body.details
     ? req.body
     : { details: req.body, paymentData: req.cookies.paymentData };
@@ -106,6 +104,7 @@ app.post("/payments/details", (req, res) => {
       },
     })
     .then((response) => {
+      console.log("payment details");
       console.log(response.data);
       res.json(response.data);
     })
