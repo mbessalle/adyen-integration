@@ -43,6 +43,9 @@ app.post("/paymentMethods", (req, res) => {
 });
 
 app.post("/payments", (req, res) => {
+  console.log("########## /PAYMENTS REQUEST ##########");
+  console.log(req.body);
+  console.log("\n");
   const reference = "moises_checkoutChallenge";
   axios
     .post(
@@ -83,8 +86,9 @@ app.post("/payments", (req, res) => {
       if (response.data.action && response.data.action.type == "redirect") {
         res.cookie("paymentData", response.data.action.paymentData);
       }
-      console.log("/payments response server");
+      console.log("########## /PAYMENTS RESPONSE ##########");
       console.log(response.data);
+      console.log("\n");
       res.json(response.data);
     })
     .catch((error) => {
@@ -93,6 +97,9 @@ app.post("/payments", (req, res) => {
 });
 
 app.post("/payments/details", (req, res) => {
+  console.log("########## /PAYMENTS/DETAILS REQUEST ##########");
+  console.log(req.body);
+  console.log("\n");
   const body = req.body.details
     ? req.body
     : { details: req.body, paymentData: req.cookies.paymentData };
@@ -104,8 +111,9 @@ app.post("/payments/details", (req, res) => {
       },
     })
     .then((response) => {
-      console.log("payment details");
+      console.log("########## /PAYMENTS/DETAILS RESPONSE ##########");
       console.log(response.data);
+      console.log("\n");
       res.json(response.data);
     })
     .catch((error) => console.error(error));
